@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
+	`java-library`
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.spotless)
     alias(libs.plugins.indra.common)
@@ -138,10 +139,10 @@ configurations.runtimeClasspath {
 }
 
 val generateMetadataFile by tasks.registering {
-    inputs.property("metadata", metadata)
-    val output = temporaryDir.resolve("plugin.json")
-    outputs.file(output)
-    doLast { output.writeText(ModMetadata.toJson(metadata)) }
+    // inputs.property("metadata", metadata)
+    // val output = temporaryDir.resolve("plugin.json")
+    // outputs.file(output)
+    // doLast { output.writeText(ModMetadata.toJson(metadata)) }
 }
 
 tasks.shadowJar {

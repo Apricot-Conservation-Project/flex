@@ -34,11 +34,11 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.time.Duration
 
-internal class CachingTranslator(
-    translator: Translator,
-    maximumSize: Int,
-    val successRetention: Duration,
-    val failureRetention: Duration,
+public class CachingTranslator(
+    public val translator: Translator,
+    public val maximumSize: Int,
+    public val successRetention: Duration,
+    public val failureRetention: Duration,
     ticker: Ticker = Ticker.systemTicker(),
 ) : Translator {
     init {

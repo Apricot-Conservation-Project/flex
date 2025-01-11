@@ -31,12 +31,13 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.future.future
 import org.slf4j.LoggerFactory
+import java.util.concurrent.CompletableFuture
 
-internal class RollingTranslator(private val translators: List<Translator>, private val fallback: Translator) :
+public class RollingTranslator(public val translators: List<Translator>, public val fallback: Translator) :
     Translator {
     private val cursor = AtomicInteger(0)
 
-    override fun translate(text: String, source: Locale, target: Locale) =
+public override fun translate(text: String, source: Locale, target: Locale): CompletableFuture<String> =
         FlexScope.future {
             val cursor = cursor.getAndUpdate { if (it + 1 < translators.size) it + 1 else 0 }
             for (i in translators.indices) {
@@ -50,7 +51,7 @@ internal class RollingTranslator(private val translators: List<Translator>, priv
             return@future fallback.translate(text, source, target).await()
         }
 
-    companion object {
+    private companion object {
         private val logger = LoggerFactory.getLogger(RollingTranslator::class.java)
     }
 }

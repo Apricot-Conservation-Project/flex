@@ -40,7 +40,7 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
-internal class GoogleBasicTranslator(private val apiKey: String) : Translator {
+public class GoogleBasicTranslator(public val apiKey: String) : Translator {
     private val http = HttpClient.newHttpClient()
     internal val supported: Set<Locale> = fetchSupportedLanguages()
 
@@ -114,7 +114,7 @@ internal class GoogleBasicTranslator(private val apiKey: String) : Translator {
             .toSet()
     }
 
-    companion object {
+    private companion object {
         private val TRANSLATION_V2_ENDPOINT = URI("https://translation.googleapis.com/language/translate/v2")
     }
 }

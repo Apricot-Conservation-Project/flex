@@ -37,8 +37,9 @@ import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.future.future
 import kotlinx.coroutines.withContext
+import java.util.concurrent.CompletableFuture
 
-internal class DeepLTranslator(apiKey: String, version: String = (FlexAPI.get() as MindustryPlugin).metadata.version) :
+public class DeepLTranslator(apiKey: String, version: String = (FlexAPI.get() as MindustryPlugin).metadata.version) :
     Translator {
     private val translator =
         com.deepl.api.Translator(
@@ -49,7 +50,7 @@ internal class DeepLTranslator(apiKey: String, version: String = (FlexAPI.get() 
     internal val sourceLanguages: List<Locale> = fetchLanguages(LanguageType.Source)
     internal val targetLanguages: List<Locale> = fetchLanguages(LanguageType.Target)
 
-    override fun translate(text: String, source: Locale, target: Locale) =
+    override fun translate(text: String, source: Locale, target: Locale): CompletableFuture<String> =
         FlexScope.future {
             if (text.isBlank()) {
                 return@future text
@@ -103,7 +104,7 @@ internal class DeepLTranslator(apiKey: String, version: String = (FlexAPI.get() 
 
     private suspend fun fetchRateLimited() = withContext(Dispatchers.IO) { translator.usage.character!!.limitReached() }
 
-    companion object {
+    private companion object {
         private val DEFAULT_OPTIONS = TextTranslationOptions().setFormality(Formality.PreferLess)
     }
 }

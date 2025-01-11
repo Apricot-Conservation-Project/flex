@@ -40,12 +40,13 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import java.util.concurrent.CompletableFuture
 
-internal class LibreTranslateTranslator(private val endpoint: URI, private val apiKey: String?) : Translator {
+public class LibreTranslateTranslator(public val endpoint: URI, public val apiKey: String?) : Translator {
     private val http = HttpClient.newHttpClient()
     internal val languages: Map<String, Set<String>> = fetchSupportedLanguages()
 
-    override fun translate(text: String, source: Locale, target: Locale) =
+    override fun translate(text: String, source: Locale, target: Locale): CompletableFuture<String> =
         FlexScope.future {
             if (source.language == "router" || target.language == "router") {
                 return@future "router"
